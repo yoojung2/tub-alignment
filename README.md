@@ -24,14 +24,6 @@ Voting Dashboard (Excel)          PPTX (원본)
 pip install -r requirements.txt
 ```
 
-## 스크립트
-
-| 파일 | 설명 |
-|---|---|
-| `tub_agent.py` | **메인** — Excel Voting Dashboard 연동, 슬라이드 필터·정렬·섹션 자동 구성 |
-| `tub_build_sections.py` | 하드코딩된 키워드 기반, 선정 슬라이드 삭제 + Area별 Section 재정렬 |
-| `hide_slides_2026_04.py` | KEEP 리스트 기반 슬라이드 숨김 처리 (간단 버전) |
-
 ## 사용법
 
 ### 기본 실행 (Excel 자동 탐색)
@@ -56,22 +48,9 @@ python tub_agent.py "2026_04 - Azure-TUB - 복사본.pptx" \
 python tub_agent.py input.pptx --output result.pptx
 ```
 
-### 보조 스크립트
-
-```bash
-# 슬라이드 숨김만 (삭제 X)
-python hide_slides_2026_04.py "2026_04 - Azure-TUB - 복사본.pptx"
-
-# 하드코딩 키워드 기반 Section 구성
-python tub_build_sections.py "2026_04 - Azure-TUB - 복사본.pptx"
-```
-
 ## 출력
 
-| 파일 | 생성 스크립트 | 내용 |
-|---|---|---|
-| `*_sectioned.pptx` | `tub_agent.py`, `tub_build_sections.py` | 비선정 삭제 + Area별 Section 정렬 |
-| `*_filtered.pptx` | `hide_slides_2026_04.py` | 비선정 슬라이드 숨김 (삭제 아님) |
+- `*_sectioned.pptx` — 비선정 삭제 + Area별 Section 정렬 완료된 PPTX
 
 ## 동작 상세
 
