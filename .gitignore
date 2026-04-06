@@ -1,0 +1,20 @@
+# PowerPoint / Excel data files
+*.pptx
+*.xlsx
+*.xls
+
+# OS
+desktop.ini
+Thumbs.db
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
