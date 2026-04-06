@@ -5,7 +5,7 @@ Voting Dashboard Excel에서 선정 항목을 읽어 PPTX를 자동 처리합니
 
 처리 내용:
   1. 비선정 슬라이드 삭제 (숨김 아님)
-  2. Section 구성:  Opening → IH → CH → YJ → 나머지 → Closeout
+  2. Section 구성:  Opening → IH → CH → YJ → MH → Closeout
   3. 카테고리 헤더 슬라이드는 해당 카테고리에 선정 항목이 있으면 보존
   4. Agenda까지는 Opening, Thank You 슬라이드는 Closeout으로 이동
 
@@ -47,7 +47,7 @@ KNOWN_CATEGORIES = {
 }
 
 # Section 표시 순서
-SECTION_ORDER = ['IH', 'CH', 'YJ', '나머지']
+SECTION_ORDER = ['IH', 'CH', 'YJ', 'MH']
 
 # 네임스페이스
 REL_NS = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'
@@ -122,7 +122,7 @@ def load_voting_data(excel_path, sheet_name=None):
             if cell_c and cell_c.value and not isinstance(cell_c.value, (int, float)):
                 area = str(cell_c.value).strip()
             if not area:
-                area = '나머지'
+                area = 'MH'
 
             norm = _normalize(title)
             selected[norm] = {
@@ -180,7 +180,7 @@ CLOSEOUT_KEYWORDS = [
 def classify_slide(title, selected, cat_areas):
     """
     Returns: (section, display_title)
-      section: 'Opening' | 'IH' | 'CH' | 'YJ' | '나머지' | 'Closeout' | None(삭제)
+      section: 'Opening' | 'IH' | 'CH' | 'YJ' | 'MH' | 'Closeout' | None(삭제)
     """
     if not title:
         return None, title
@@ -342,7 +342,7 @@ def process(pptx_path, excel_path, sheet_name=None, output_path=None):
     # ── 삭제 ──
     delete_slides(prs, delete_idx)
 
-    # ── 재정렬: Opening → IH → CH → YJ → 나머지 → Closeout ──
+    # ── 재정렬: Opening → IH → CH → YJ → MH → Closeout ──
     kept_sorted  = sorted(keep_map.keys())
     new_idx_map  = {orig: new for new, orig in enumerate(kept_sorted)}
 
@@ -350,7 +350,7 @@ def process(pptx_path, excel_path, sheet_name=None, output_path=None):
     for orig in kept_sorted:
         sec   = keep_map[orig]
         new_i = new_idx_map[orig]
-        bucket_key = sec if sec in buckets else '나머지'
+        bucket_key = sec if sec in buckets else 'MH'
         buckets[bucket_key].append(new_i)
 
     final_order = []
@@ -379,7 +379,7 @@ def process(pptx_path, excel_path, sheet_name=None, output_path=None):
         if cnt:
             print(f"  {key:<12}: {cnt}장")
     print(f"\n저장 완료: {output_path}")
-    print("PowerPoint 슬라이드 패널에서 Opening / IH / CH / YJ / 나머지 / Closeout 섹션 확인")
+    print("PowerPoint 슬라이드 패널에서 Opening / IH / CH / YJ / MH / Closeout 섹션 확인")
 
 
 # ═══════════════════════════════════════════════════════════════
