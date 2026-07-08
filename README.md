@@ -14,7 +14,7 @@ Voting Dashboard (Excel)          PPTX (원본)
    (Opening → IH → CH → YJ → MH → Closeout)
 ```
 
-1. **Voting Dashboard (Excel)** 에서 투표 결과 확인 → 음영 처리된 항목 = 선정
+1. **Voting Dashboard (Excel)** 에서 투표 결과 확인 → C열에 담당자(IH/CH/YJ/MH)가 지정된 항목 = 선정
 2. **PPTX 필터링** — 비선정 슬라이드 삭제
 3. **Section 구성** — Area(IH / CH / YJ / MH)별 재정렬 + PowerPoint Section 생성
 
@@ -56,8 +56,8 @@ python tub_agent.py input.pptx --output result.pptx
 
 ### Excel 파싱 (`tub_agent.py`)
 - `_result` 접미사가 있는 시트를 자동 선택 (최신 우선)
-- 셀 배경색(음영)이 있는 행 = 선정 항목
-- C열에서 담당 Area(IH/CH/YJ) 추출, 없으면 `MH`
+- C열(Area)에 담당자 코드(IH/CH/YJ/MH)가 지정된 행 = 선정 항목
+- 해당 C열 값이 그대로 담당 Area로 사용됨
 
 ### 슬라이드 분류
 - **Opening**: 표지 ~ Agenda (포함)

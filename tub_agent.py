@@ -49,6 +49,9 @@ KNOWN_CATEGORIES = {
 # Section 표시 순서
 SECTION_ORDER = ['IH', 'CH', 'YJ', 'MH']
 
+# 발표 담당자(Area) 코드 — C열에 이 값이 있으면 선정 항목
+PRESENTERS = set(SECTION_ORDER)
+
 # 네임스페이스
 REL_NS = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'
 P14_NS = 'http://schemas.microsoft.com/office/powerpoint/2010/main'
@@ -58,22 +61,6 @@ EXT_URI = '{521415D9-36F7-43E2-AB2F-B90AF26B5E84}'
 # ═══════════════════════════════════════════════════════════════
 # 2. Excel 파싱
 # ═══════════════════════════════════════════════════════════════
-
-def _is_shaded(cell):
-    fill = cell.fill
-    if not fill or not fill.fill_type or fill.fill_type == 'none':
-        return False
-    fg = fill.fgColor
-    try:
-        rgb = fg.rgb
-        return rgb not in {'00000000', 'FFFFFFFF', '00FFFFFF', 'FF000000'}
-    except Exception:
-        try:
-            _ = fg.theme
-            return True
-        except Exception:
-            return fill.fill_type == 'solid'
-
 
 def load_voting_data(excel_path, sheet_name=None):
     """
@@ -116,14 +103,12 @@ def load_voting_data(excel_path, sheet_name=None):
             area_counts.setdefault(current_cat, {})
             continue
 
-        # 선정 항목 (음영 있음)
-        if _is_shaded(cell_a):
-            area = ''
-            if cell_c and cell_c.value and not isinstance(cell_c.value, (int, float)):
-                area = str(cell_c.value).strip()
-            if not area:
-                area = 'MH'
+        # 선정 항목: C열(담당자)에 발표자 코드(IH/CH/YJ/MH)가 지정된 행
+        area = ''
+        if cell_c and cell_c.value is not None:
+            area = str(cell_c.value).strip().upper()
 
+        if area in PRESENTERS:
             norm = _normalize(title)
             selected[norm] = {
                 'title': title,
